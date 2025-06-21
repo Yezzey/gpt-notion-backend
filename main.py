@@ -13,15 +13,8 @@ NOTION_API_URL = "https://api.notion.com/v1/pages"
 NOTION_DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
 NOTION_TOKEN = os.getenv("NOTION_TOKEN")
 NOTION_VERSION = "2022-06-28"
+ENV_MESSAGE = os.getenv("ENV_MESSAGE")
 CACHE_FILE = "last_message.txt"
-MESSAGE_FILE = "test_message.txt"
-
-def get_latest_message():
-    try:
-        with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
-            return f.read().strip()
-    except FileNotFoundError:
-        return None
 
 def get_cached_message():
     if os.path.exists(CACHE_FILE):
@@ -56,9 +49,9 @@ def send_to_notion(message):
         print(f"❌ Błąd zapisu: {response.status_code}\n{response.text}")
 
 def background_loop():
-    print("📡 Start zapisu do Notion (Flask backend)...")
+    print("📡 Start zapisu do Notion (ENV_MESSAGE backend)...")
     while True:
-        latest = get_latest_message()
+        latest = ENV_MESSAGE
         cached = get_cached_message()
         if latest and latest != cached:
             send_to_notion(latest)
